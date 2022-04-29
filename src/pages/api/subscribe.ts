@@ -2,8 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import { stripe } from "../../providers/stripe";
 
-
-
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if(req.method === 'POST'){
@@ -26,7 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             cancel_url: process.env.STRIPE_CANCEL_URL
         })
 
-        return res.status(200).json({ sessionID: stripeCheckoutSession })
+        return res.status(200).json({ sessionId: stripeCheckoutSession.id })
     } else {
         res.setHeader('Allow', 'POST')
         res.status(405).end('Method not allowed')
