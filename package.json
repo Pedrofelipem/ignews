@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prismicio/client": "^6.4.3",
     "@slicemachine/init": "^1.1.8",
     "@stripe/stripe-js": "^1.29.0",
     "axios": "^0.27.2",
