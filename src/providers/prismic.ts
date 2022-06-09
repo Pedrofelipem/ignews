@@ -1,13 +1,25 @@
-import Prismic from '@prismicio/client'
-import { config } from 'process';
+import * as Prismic from '@prismicio/client'
+import sm from '../../sm.json'
 
-export function getPrismicClient() {
-    const prismic = Prismic.createClient(
-        process.env.PRISMIC_ENDPOINT,
-        {
-            accessToken: process.env.PRISMIC_ACCESS_TOKEN
-        }
-    )
+export const endpoint = sm.apiEndpoint
+export const repositoryName = Prismic.getRepositoryName(endpoint)
 
-    return prismic;
+export function linkResolver(doc) {
+  switch (doc.type) {
+    case 'homepage':
+      return '/'
+    case 'page':
+      return `/${doc.uid}`
+    default:
+      return null
+  }
+}
+
+
+export function getPrimicClient() {
+  const client = Prismic.createClient(endpoint, {
+    accessToken: process.env.PRISMIC_ACCESS_TOKEN,
+  })
+
+  return client
 }
