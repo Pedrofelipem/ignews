@@ -1,7 +1,7 @@
 import * as Prismic from '@prismicio/client'
 import sm from '../../sm.json'
 
-export const endpoint = sm.apiEndpoint
+const endpoint = sm.apiEndpoint
 export const repositoryName = Prismic.getRepositoryName(endpoint)
 
 export function linkResolver(doc) {
@@ -14,7 +14,6 @@ export function linkResolver(doc) {
       return null
   }
 }
-
 
 export function getPrimicClient() {
   const client = Prismic.createClient(endpoint, {

@@ -1,11 +1,14 @@
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import * as Prismic from '@prismicio/client'
+import { RichText } from 'prismic-dom'
+import * as prismicH from '@prismicio/helpers'
 
 import { getPrimicClient } from '../../providers/prismic'
 import styles from './styles-posts.module.scss'
+import { PostsProps } from '../../models/postsProps'
 
-export default function Posts(){
+export default function Posts({ posts }: PostsProps){
     
     return(
         <>
@@ -15,27 +18,15 @@ export default function Posts(){
 
             <main className={styles.container}>
                 <div className={styles.posts}>
-                    <a href='#'>
-                       <time> 14 de maio de 2022</time>
-                       <strong>Further learning: What is the Slice Simulator?</strong>
-                       <p>The Slice Simulator is a mini-app that simulates what your Slices will look like
-                       in production, using mock data. The Slice Simulator uses an iframe, which runs locally, to simulate your Slices.</p>
-                    </a>
-                    <a href='#'>
-                       <time> 14 de maio de 2022</time>
-                       <strong>Further learning: What is the Slice Simulator?</strong>
-                       <p>The Slice Simulator is a mini-app that simulates what your Slices will look like
-                       in production, using mock data. The Slice Simulator uses an iframe, which runs locally, to simulate your Slices.</p>
-                    </a>
-                    <a href='#'>
-                       <time> 14 de maio de 2022</time>
-                       <strong>Further learning: What is the Slice Simulator?</strong>
-                       <p>The Slice Simulator is a mini-app that simulates what your Slices will look like
-                       in production, using mock data. The Slice Simulator uses an iframe, which runs locally, to simulate your Slices.</p>
-                    </a>
+                    {posts.map(Post => (
+                      <a href='#' key={Post.slug}>
+                         <time>{Post.updatedAt}</time>
+                         <strong>{Post.title}</strong>
+                         <p>{Post.excerpt}</p>
+                      </a>
+                    ))}
                 </div>
             </main>
-        
         </>
     )
 }
@@ -49,9 +40,23 @@ export const getStaticProps: GetStaticProps = async () => {
         fetch: ['Post.title', 'Post.content'],
         pageSize: 100,
     })
-
-    console.log(JSON.stringify(response, null, 2));
+    
+    const posts = response.results.map(post => {
+        return {
+            slug: post.uid,
+            title: post.data.title,
+            excerpt: post.data.content.find(content => content.type === 'paragraph')?.text ?? '',
+            updatedAt: new Date(post.last_publication_date).toLocaleDateString('pt-BR',{
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            })
+        }
+    })
+    
     return{
-        props: {}
+        props: {
+            posts
+        }
     }
 }
