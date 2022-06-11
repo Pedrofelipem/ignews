@@ -15,7 +15,7 @@ export function linkResolver(doc) {
   }
 }
 
-export function getPrimicClient() {
+export function getPrismicClient(req?: unknown) {
   const client = Prismic.createClient(endpoint, {
     accessToken: process.env.PRISMIC_ACCESS_TOKEN,
   })
