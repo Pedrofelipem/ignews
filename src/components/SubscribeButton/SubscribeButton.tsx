@@ -1,4 +1,5 @@
 import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import { SubscribeButtonProps } from '../../models/subscribeButtonProps';
 import { api } from '../../providers/api';
 import { getStripeJs } from '../../providers/stripe-js';
@@ -11,6 +12,14 @@ export function SubscribeButton({ priceId }: SubscribeButtonProps) {
     async function hendleSubscribe() {
         if(!session) {
             signIn('github')
+            return;
+        }
+
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const router = useRouter()
+
+        if(!session.ativeSubscription){
+            router.push('/post')
             return;
         }
 

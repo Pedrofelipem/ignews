@@ -12,23 +12,25 @@ import { linkResolver, repositoryName } from '../providers/prismic'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <PrismicProvider
-      linkResolver={linkResolver}
-      internalLinkComponent={({ href, children, ...props }) => (
-        <Link href={href}>
-          <a {...props}>
-            {children}
-          </a>
-        </Link>
-      )}
-    >
-      <PrismicPreview repositoryName={repositoryName}>
-        <NextAuthProvider session={pageProps.session} basePath={process.env.NEXTAUTH_URL}>
-          <Header />
-          <Component {...pageProps} />
-        </NextAuthProvider>
-      </PrismicPreview>
-    </PrismicProvider>
+    <NextAuthProvider session={pageProps.session} basePath={process.env.NEXTAUTH_URL}>
+      <PrismicProvider
+        linkResolver={linkResolver}
+        internalLinkComponent={({ href, children, ...props }) => (
+          <Link href={href}>
+            <a {...props}>
+              {children}
+            </a>
+          </Link>
+        )}
+      >
+        <PrismicPreview repositoryName={repositoryName}>
+          
+            <Header />
+            <Component {...pageProps} />
+          
+        </PrismicPreview>
+      </PrismicProvider>
+    </NextAuthProvider>
   )
 }
 
